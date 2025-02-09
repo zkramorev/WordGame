@@ -11,7 +11,8 @@ func (cr *ChatRoom) HandleConnection(w http.ResponseWriter, r *http.Request) {
 	conn, _ := upgrader.Upgrade(w, r, nil)
 
 	if !cr.addClient(conn) {
-		conn.WriteMessage(websocket.TextMessage, []byte("Комната уже заполнена!"))
+		msg := fmt.Sprintf("{\"type\": \"error\", \"text\": \"Комната уже заполнена!\"}")
+		conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		conn.Close()
 		return
 	}
