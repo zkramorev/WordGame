@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package wordCheckerPB;
+
+option go_package = "wordCheckerPB/";
+
+service WordService {
+  rpc CheckWord (WordRequest) returns (WordResponse);
+}
+
+message WordRequest {
+  string word = 1;
+}
+
+message WordResponse {
+  string word = 1;
+  bool is_correct = 2;
+}
