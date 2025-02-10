@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  go-server:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - python-server
+    networks:
+      - app-network
+
+
+  redis:
+    image: redis:latest
+    container_name: wordgame-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    restart: always
+
+  python-loader:
+      build:
+        context: ./wordAnalysisService/redis
+      container_name: wordgame-python-loader
+      depends_on:
+        - redis
+      networks:
+        - app-network
+      command: [ "python", "/app/words_redis_storage.py" ]
+
+  python-server:
+    build:
+      context: ./wordAnalysisService
+    container_name: wordgame-python-server
+    ports:
+      - "50051:50051"
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

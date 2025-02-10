@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	wordChecker, err := NewWordCheckerClient("localhost:50051")
+	wordChecker, err := NewWordCheckerClient("wordgame-python-server:50051")
 	if err != nil {
 		log.Fatalf("Ошибка при подключении к gRPC-серверу: %v", err)
 	}

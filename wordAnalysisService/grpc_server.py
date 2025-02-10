@@ -1,11 +1,12 @@
-import redis
-import grpc
 from concurrent import futures
 
+import grpc
+
+import redis
 import word_pb2
 import word_pb2_grpc
 
-REDIS_HOST = "localhost"
+REDIS_HOST = "redis"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
@@ -16,6 +17,7 @@ class WordService(word_pb2_grpc.WordServiceServicer):
 
     def CheckWord(self, request, context):
         word = request.word.strip().lower()
+        print(f"Получен запрос: {word}", flush=True)
         if not word:
             return word_pb2.WordResponse(word=word, is_correct=False)
 
@@ -28,9 +30,8 @@ def serve():
     word_pb2_grpc.add_WordServiceServicer_to_server(WordService(), server)
     server.add_insecure_port("[::]:50051")
     server.start()
-    print("gRPC сервер запущен на порту 50051...")
+    print("gRPC сервер запущен на порту 50051...", flush=True)
     server.wait_for_termination()
 
 
-if __name__ == "__main__":
-    serve()
+serve()
