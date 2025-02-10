@@ -38,6 +38,8 @@ services:
     ports:
       - "50051:50051"
     restart: always
+    volumes:
+      - ./logs:/logs
     networks:
       - app-network
 
